@@ -473,7 +473,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
         file.out <- readLines(full.path)
       } else {
         # some kind of delimited file
-        if (all(splitto[1]==splitto[2]))
+        if (all(splitto[1]==splitto[h2]))
         {
           # test whether there is a significant nchar difference between first and other rows
           # as a means of detecting whether the first row is a header row
