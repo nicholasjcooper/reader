@@ -297,7 +297,7 @@ column.salvage <- function(frame,desired,testfor, ignore.case=TRUE)
   # and change name of the first detected misname in the 'testfor' list to 'desired'
   # e.g, want desired column 'GRP' and look for misnamings: 'group', 'Grp', 'grp', etc
   if(is.null(colnames(frame))) { warning("frame had no column names"); return(frame) }
-  if(!desired %in% colnames(frame)) {
+  if(!all(desired %in% colnames(frame))) {
     # ^ ie, if 'desired' already present, do nothing
     tf <- testfor; cf <- colnames(frame)
     if(ignore.case) { tf <- c(tolower(desired),tolower(tf)); cf <- tolower(cf) } 
@@ -434,10 +434,12 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
     # other text .txt file
     detect <- get.delim(full.path,n=50,comment="#",large=10,one.byte=FALSE) 
     if(length(detect)!=0) { def <- detect }
-    first.10 <- readLines(full.path,n=10)
+    first.10 <- readLines(full.path,n=10); hope10 <- length(first.10)
+    if(hope10<3) { lown <- hope10 } else { lown <- 3 }
+    if(hope10<2) { h2 <- lown <- 1 } else { h2 <- 2 }
     mini.parse <- strsplit(first.10,def)
     splitto <- sapply(mini.parse,length)
-    if(all(splitto[3:10]==splitto[2]) & (splitto[1]==(splitto[2]-1))) {
+    if(all(splitto[lown:hope10]==splitto[h2]) & (splitto[1]==(splitto[h2]-1))) {
       # was first row 1 delimiter shorter than all other rows? (i.e, header row)
       if(nchar(def)>1) {
         #read table only supports 1 byte delimiters (not regular expressions) 
