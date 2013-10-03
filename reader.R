@@ -1039,7 +1039,8 @@ file.ncol <- function(fn,reader=FALSE,del=NULL,comment="#",skip=0,force=FALSE,ex
     ncols <- ncol(fl); rm(fl)
   } else {
     if(is.null(del)) {
-      del <- get.delim(fn,n=6,comment=comment,skip=skip)
+      # suppress in case it's a vector file, e.g, ncol will be 1
+      del <- suppressWarnings(get.delim(fn,n=6,comment=comment,skip=skip))
     }
     test.bit <- n.readLines(fn=fn,n=5,comment=comment,skip=skip)
     lens <- sapply(strsplit(test.bit,del),length)
@@ -1139,7 +1140,11 @@ get.delim <- function(fn,n=10,comment="#",skip=0,
   num.del <- list()
   if(any(nchar(delims)>1) & one.byte) { delims <- delims[-which(nchar(delims)>1)] }
   for (cc in 1:length(delims)) {
-    num.del[[cc]] <- sapply(strsplit(test.bit,delims[[cc]]),length)
+    num.del[[cc]] <- sapply(strsplit(test.bit,delims[[cc]],fixed=T),length)
+  }
+  if(all(unlist(num.del)==1)) { 
+    warning("not a delimited file, probably a vector file")
+    return(NA)
   }
   # are there some delimiters that produce consistent ncol between rows?
   need.0 <- sapply(num.del,function(X) { sum(diff(X)) })
