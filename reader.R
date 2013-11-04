@@ -148,9 +148,9 @@ force.frame <- function(unknown.data,too.big=10^7)
           out.data <- as.matrix(unknown.data)
         } else {
           if(length(grep("big.matrix",uis))>0) {
-            if(!exists("getBigMat",mode="function")) { 
+            if(!exists("get.big.matrix",mode="function")) { 
               warning("'bigpc' package missing can't read big.matrix"); return(NULL) }
-            unknown.data <- do.call("getBigMat",list(bigMat=unknown.data)) # once bigpc  is submitted replace with actual fn
+            unknown.data <- do.call("get.big.matrix",list(bigMat=unknown.data)) # once bigpc  is submitted replace with actual fn
             if(estimate.memory(unknown.data) <= too.big) {
               cat(" converting big.matrix object into a dataframe\n")
               out.data <- as.matrix(unknown.data) 
@@ -770,7 +770,7 @@ rmv.ext <- function(fn=NULL,only.known=TRUE,more.known=NULL,print.known=FALSE) {
   # remove file extension from a filename character string
   known.ext <- c("TXT","RDATA","TAB","DAT","CSV","VCF","GCM","BIM","MAP","FAM",
                  "PFB","SH","R","CPP","H","DOC","DOCX","XLS","XLSX","PDF","JPG",
-                 "BMP","PNG","TAR","GZ","CNV","PL","PY","ZIP","ORG",
+                 "BMP","PNG","TAR","GZ","CNV","PL","PY","ZIP","ORG","RDA","DSC","BCK",
                  "ABW","HTM","HTML",toupper(more.known))
   if(is.null(fn)) { 
     if(print.known) {
@@ -1131,7 +1131,7 @@ n.readLines <- function(fn,n,comment="#",skip=0,header=TRUE)
 #'   print(get.delim(test.files[cc])) }
 #' unlink(test.files)
 get.delim <- function(fn,n=10,comment="#",skip=0,
-                        delims=c("\t"," ","\t| +",";","|",","),large=10,one.byte=TRUE)  
+                        delims=c("\t"," ","\t| +",";",","),large=10,one.byte=TRUE)  
 {
   # test top 'n' lines to determine what delimeter the file uses
   if(!file.exists(fn)) { stop(paste("cannot derive delimiter as file",fn,"was not found"))}
