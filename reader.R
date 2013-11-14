@@ -890,8 +890,11 @@ dir.force.slash <- function(dir) {
 #'  initiate this call within the function
 #' @param coms list of valid commands to look for, not case sensitive
 #' @param def list of default values for each parameter (in same order)
-#' @param verbose whether to print to the console which assignments are made and warning messages
-#' @return returns dataframe showing the resulting values for each 'coms'
+#' @param verbose logical, whether to print to the console which assignments are made and warning messages
+#' @param list.out logical, whether to return output as a list or data.frame 
+#' @return returns dataframe showing the resulting values [column 1, "value"] for each 'coms' (rownames); or, if
+#'  list.out=TRUE, then returns a list with names corresponding to 'coms' and values equivalent to 'value' column of 
+#'  the data.frame that would be returned if list.out=FALSE
 #' @export 
 #' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
 #' @examples
@@ -904,12 +907,13 @@ dir.force.slash <- function(dir) {
 #' # run above command in the terminal, or using 'system' below:
 #' # not run # arg <- system(bash.cmd)
 #' # not run # unlink(temp.fn) # delete temporary file
-parse.args <- function(arg.list=NULL,coms=c("X"),def=0, verbose=TRUE)
+parse.args <- function(arg.list=NULL,coms=c("X"),def=0, list.out=F, verbose=TRUE)
 {
   # parse arguments entered running R from the command line
   # using NAME=VALUE
   if(is.null(arg.list)) { arg.list <- commandArgs() }
   if(length(coms)>1 & length(def)==1) { def <- rep(def,length(coms)) }
+  coms.original.case <- coms
   coms <- toupper(coms)
   outframe <- data.frame(value=paste(def),stringsAsFactors=FALSE)
   rownames(outframe) <- coms
@@ -942,6 +946,10 @@ parse.args <- function(arg.list=NULL,coms=c("X"),def=0, verbose=TRUE)
   } else {
     outframe <- NULL
   } 
+  rownames(outframe) <- coms.original.case
+  if(list.out) {
+    outframe <- as.list(as.data.frame(t(outframe),stringsAsFactors=FALSE))
+  }
   return (outframe)
 }
 
