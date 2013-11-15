@@ -640,7 +640,7 @@ shift.rownames <- function(dataf,override=FALSE,warn=FALSE)
       }
     }    
     if(numerify) { for (dd in ncol(dataout))
-    { dataout[,dd] <- as.numeric(as.character(dataout[,dd])) }
+    { suppressWarnings(dataout[,dd] <- as.numeric(as.character(dataout[,dd]))) }
     } 
     if(anyDuplicated(rn)) { if(warn) { warning("rownames not unique, so leaving as NULL") }; return (dataf) }
     rownames(dataout) <- rn
@@ -664,7 +664,7 @@ shift.rownames <- function(dataf,override=FALSE,warn=FALSE)
               if(anyDuplicated(rn)) { if(warn) { warning("rownames not unique, so leaving as NULL") }; return (dataf) }
               rownames(dataout) <- paste(rn)
               if(sup>=10) { for (dd in ncol(dataout))
-              { dataout[,dd] <- as.numeric(as.character(dataout[,dd])) }
+              { suppressWarnings(dataout[,dd] <- as.numeric(as.character(dataout[,dd]))) }
               }    
               return(dataout)
             }            
