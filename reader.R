@@ -322,6 +322,8 @@ column.salvage <- function(frame,desired,testfor, ignore.case=TRUE)
 #' necessary to read the file. Will attempt to detect the delimiter,
 #' and detect whether there is a heading/column names, and whether 
 #' the first column should be rownames, or left as a data column.
+#' Internal calls to standard file reading functions use 
+#' 'stringsAsFactors=FALSE'.
 #'
 #' @param fn filename (with or without path if dir is specified)
 #' @param dir optional directory if separate path/filename is preferred
@@ -426,7 +428,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
   if(typ==types[2])
   {
     # csv file
-    file.out <- read.csv(full.path, ...)
+    file.out <- read.csv(full.path,stringsAsFactors=FALSE,...)
     file.out <- shift.rownames(file.out,override,warn=!quiet)
   }
   if(typ==types[3])
@@ -464,7 +466,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
         if(all(file.out[,1]=="") & ncol(file.out)>1) { file.out <- file.out[,-1] }
         rownames(file.out) <- NULL
       } else {
-        file.out <- read.table(full.path, ..., sep=def,header=TRUE,row.names=1)
+        file.out <- read.table(full.path, ..., sep=def,header=TRUE,row.names=1,stringsAsFactors=FALSE)
       }
     } else {
       ## probably has a header too!
@@ -515,7 +517,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
               }
               rownames(file.out) <- NULL
             } else {
-              file.out <- read.delim(full.path, ..., sep=def,header=hdr)
+              file.out <- read.delim(full.path, ..., sep=def,header=hdr,stringsAsFactors=FALSE)
               file.out <- shift.rownames(file.out,override,warn=!quiet)
             }
           } else {
