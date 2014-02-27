@@ -169,7 +169,7 @@ force.frame <- function(unknown.data,too.big=10^7)
           } else {
             warning(paste("trying to convert object type",uis[1],"into a dataframe"),
                     " - result may be unpredictable")
-            out.data <- as.data.frame(unknown.data)
+            out.data <- as.df(unknown.data)
             #print(head(out.data))
             return(out.data)
           }
@@ -177,7 +177,7 @@ force.frame <- function(unknown.data,too.big=10^7)
       }
     }
   }
-  return(as.data.frame(out.data))
+  return(as.df(out.data))
 }
 
 
@@ -469,7 +469,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
             return(split.by.ws)
           }
         }
-        file.out <- t(as.data.frame(split.by.ws))
+        file.out <- t(as.df(split.by.ws))
         ## END: SAME CHUNK AS BELOW FOR NON-HEADER VERSION ##
         if(all(file.out[,1]=="") & ncol(file.out)>1) { file.out <- file.out[,-1] }
         rownames(file.out) <- NULL
@@ -488,9 +488,16 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
           # test whether there is a significant nchar difference between first and other rows
           # as a means of detecting whether the first row is a header row
           char.cnts <- sapply(mini.parse,nchar)
+          #prv(char.cnts,mini.parse);
+          lns <- sapply(char.cnts,length); 
+          if(!sum(abs(diff(lns)))==0) {
+            culprits <- lns!=Mode(lns)
+            warning("Line(s): ",paste(which(culprits),collapse=","),"; seemed to have a different number of columns than the majority, will attempt to read anyway")
+            mini.parse <- mini.parse[which(!culprits)]
+            char.cnts <- sapply(mini.parse,nchar)
+          }
           z.test <- function(X) { (X[1] - mean(X[-1],na.rm=TRUE))/max(1,sd(X[-1],na.rm=TRUE)) }
-          #print(as.data.frame(char.cnts));
-          Zs <- abs(apply(as.data.frame(char.cnts),1,z.test))
+          Zs <- abs(apply(as.df(char.cnts),1,z.test))
           if(length(Zs)>0) {
             #print(mini.parse); print(char.cnts); print(Zs)
             critZ <- abs(qnorm((h.test.p*(min(round(sqrt(length(Zs))),9)))/2))
@@ -516,7 +523,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
                   return(split.by.ws)
                 }
               }
-              file.out <- t(as.data.frame(split.by.ws))
+              file.out <- t(as.df(split.by.ws))
               ## END: SAME CHUNK AS ABOVE FOR NON-HEADER VERSION ##
               if(all(file.out[,1]=="") & ncol(file.out)>1) { file.out <- file.out[,-1] }
               if(nrow(file.out)>1 & hdr) {
@@ -629,7 +636,7 @@ shift.rownames <- function(dataf,override=FALSE,warn=FALSE)
     if(nrow(dataf)<1) { return(dataf) } # had no rows, so can't convert it to rownames
     typz <- sapply(sapply(dataf,is),"[[",1)
     rn <- paste(dataf[,1])
-    dataout <- as.data.frame(dataf[,-1])
+    dataout <- as.df(dataf[,-1])
     if (typz[1]=="character" & all(typz[-1] %in% c("numeric","integer")))
     {
       numerify <- TRUE
@@ -669,7 +676,7 @@ shift.rownames <- function(dataf,override=FALSE,warn=FALSE)
               return(dataf)
             } else {
               rn <- dataf[,1]
-              if(ncol(dataf)<3) { dataout <- as.data.frame(dataf[,-1]) } else {
+              if(ncol(dataf)<3) { dataout <- as.df(dataf[,-1]) } else {
                 dataout <- dataf[,-1] }
               if(anyDuplicated(rn)) { if(warn) { warning("rownames not unique, so leaving as NULL") }; return (dataf) }
               rownames(dataout) <- paste(rn)
@@ -823,6 +830,20 @@ is.ch <- function(x) {
   return(as.logical(pt1 | pt2))
 }
 
+#' Internal function 
+as.df <- function(...) {
+  ## unless 'stringsAsFactors' is called explicitly, wrap
+  # as.data.frame so that stringsAsFactors is always FALSE
+  test <- list(...)
+  if(length(names(test))<1) { doit <- FALSE } else {
+    if(names(test) %in% "stringsAsFactors") { doit <- TRUE } else { doit <- FALSE }
+  }
+  if(doit) {
+    return(as.data.frame(...))
+  } else {
+    return(as.data.frame(...,stringsAsFactors=FALSE))
+  }
+}
 
 #' Simple and robust way to create full-path file names.
 #' 
