@@ -442,7 +442,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
   if(typ==types[3])
   {
     # other text .txt file
-    detect <- get.delim(full.path,n=50,comment="#",large=10,one.byte=FALSE) 
+    detect <- suppressWarnings(get.delim(full.path,n=50,comment="#",large=10,one.byte=FALSE))
     if(length(detect)!=0) { def <- detect }
     first.10 <- readLines(full.path,n=10); hope10 <- length(first.10)
     if(hope10<3) { lown <- hope10 } else { lown <- 3 }
@@ -1179,8 +1179,10 @@ get.delim <- function(fn,n=10,comment="#",skip=0,
   num.del <- list()
   if(any(nchar(delims)>1) & one.byte) { delims <- delims[-which(nchar(delims)>1)] }
   for (cc in 1:length(delims)) {
-    num.del[[cc]] <- sapply(strsplit(test.bit,delims[[cc]],fixed=T),length)
+    fff <- nchar(delims[[cc]])==1
+    num.del[[cc]] <- sapply(strsplit(test.bit,delims[[cc]],fixed=fff),length)
   }
+  #prv(num.del)
   if(all(unlist(num.del)==1)) { 
     warning("not a delimited file, probably a vector file")
     return(NA)
