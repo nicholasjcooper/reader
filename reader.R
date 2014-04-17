@@ -349,6 +349,8 @@ column.salvage <- function(frame,desired,testfor, ignore.case=TRUE)
 #' @param more.types optionally add more file types which are read as text
 #' @param auto.vec if the file seems to only have a single column, automatically
 #'  return the result as a vector rather than a dataframe with 1 column
+#' @param one.byte logical parameter, passed to 'get.delim', whether to look for only 1-byte
+#'  delimiters, to also search for 'whitespace' which is a multibyte (wildcard) delimiter type. 
 #' @param ... further arguments to the function used by 'reader' to parse the file,
 #'  e.g, depending on file.type, can be read.table(), read.delim(), read.csv().
 #' @return returns the most appropriate object depending on the file type,
@@ -384,7 +386,8 @@ column.salvage <- function(frame,desired,testfor, ignore.case=TRUE)
 #' unlink(test.files) 
 #' # myobj <- reader(file.choose()); myobj # run this to attempt opening a file
 reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h.test.p=0.05,
-                   quiet=TRUE,treatas=NULL,override=FALSE,more.types=NULL,auto.vec=TRUE,...)
+                   quiet=TRUE,treatas=NULL,override=FALSE,more.types=NULL,
+                   auto.vec=TRUE,one.byte=FALSE,...)
 {
   # try to read in data from many types of datafile
   typ <- classify.ext(fn,more.txt=more.types)
@@ -442,7 +445,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
   if(typ==types[3])
   {
     # other text .txt file
-    detect <- suppressWarnings(get.delim(full.path,n=50,comment="#",large=10,one.byte=FALSE))
+    detect <- suppressWarnings(get.delim(full.path,n=50,comment="#",large=10,one.byte=one.byte))
     if(length(detect)!=0) { def <- detect }
     first.10 <- readLines(full.path,n=10); hope10 <- length(first.10)
     if(hope10<3) { lown <- hope10 } else { lown <- 3 }
@@ -1170,7 +1173,7 @@ n.readLines <- function(fn,n,comment="#",skip=0,header=TRUE)
 #'   print(get.delim(test.files[cc])) }
 #' unlink(test.files)
 get.delim <- function(fn,n=10,comment="#",skip=0,
-                        delims=c("\t"," ","\t| +",";",","),large=10,one.byte=TRUE)  
+                        delims=c("\t","\t| +"," ",";",","),large=10,one.byte=TRUE)  
 {
   # test top 'n' lines to determine what delimeter the file uses
   if(!file.exists(fn)) { stop(paste("cannot derive delimiter as file",fn,"was not found"))}
