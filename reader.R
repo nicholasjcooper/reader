@@ -387,7 +387,7 @@ column.salvage <- function(frame,desired,testfor, ignore.case=TRUE)
 #' # myobj <- reader(file.choose()); myobj # run this to attempt opening a file
 reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h.test.p=0.05,
                    quiet=TRUE,treatas=NULL,override=FALSE,more.types=NULL,
-                   auto.vec=TRUE,one.byte=FALSE,...)
+                   auto.vec=TRUE,one.byte=TRUE,...)
 {
   # try to read in data from many types of datafile
   typ <- classify.ext(fn,more.txt=more.types)
