@@ -351,6 +351,7 @@ column.salvage <- function(frame,desired,testfor, ignore.case=TRUE)
 #'  return the result as a vector rather than a dataframe with 1 column
 #' @param one.byte logical parameter, passed to 'get.delim', whether to look for only 1-byte
 #'  delimiters, to also search for 'whitespace' which is a multibyte (wildcard) delimiter type. 
+#'  Use one.byte = FALSE, to read fixed width files, e.g, many plink files.
 #' @param ... further arguments to the function used by 'reader' to parse the file,
 #'  e.g, depending on file.type, can be read.table(), read.delim(), read.csv().
 #' @return returns the most appropriate object depending on the file type,
@@ -788,6 +789,7 @@ get.ext <- function(fn) {
 #' rmv.ext(c("temp.cnv","temp.txt","temp.epi"),more.known="epi") 
 rmv.ext <- function(fn=NULL,only.known=TRUE,more.known=NULL,print.known=FALSE) {
   # remove file extension from a filename character string
+  #if updating this function, also update internal copy in NCmisc
   known.ext <- c("TXT","RDATA","TAB","DAT","CSV","VCF","GCM","BIM","MAP","FAM",
                  "PFB","SH","R","CPP","H","DOC","DOCX","XLS","XLSX","PDF","JPG",
                  "BMP","PNG","TAR","GZ","CNV","PL","PY","ZIP","ORG","RDA","DSC","BCK",
@@ -876,6 +878,7 @@ as.df <- function(...) {
 #' cat.path(mydir,"temp.docx",ext="doc")
 cat.path <- function(dir="",fn,pref="",suf="",ext="",must.exist=FALSE) 
 {
+  #if updating this function, also update internal copy in NCmisc
   dir.ch <- .Platform$file.sep
   if(is.list(fn) & is.ch(fn)) { fn <- unlist(fn) } #; 
   if(length(dir)>1) { dir <- dir[1]; cat("only first dir was used\n") }
