@@ -1024,7 +1024,7 @@ file.nrow <- function(fn="",dir="",all.in.dir=FALSE) {
     if(length(fn)>1) { warning("only first file used, to do multiple use all.in.dir") }
     if(!is.file(fn[1],dir)) { stop("Error: file did not exist") }
   }
-  if(!check.linux.install("wc")) { warning("linux command 'wc' not available"); return(NULL) }
+  if(!check.linux.install("wc")) { return(suppressWarnings(wc.windows(fn))) }
   if(tolower(get.ext(fn))!="gz") { cmd <- paste("wc -l ",fn,sep="") } else {
     if(!all.in.dir) { cmd <- paste("zcat ",fn[1]," | wc -l ",sep="") ; zip <- TRUE } }
   linez <- system(cmd,intern=TRUE)
@@ -1037,6 +1037,20 @@ file.nrow <- function(fn="",dir="",all.in.dir=FALSE) {
   if(zip & all(is.na(nms))) { nms <- (fn[1]) }
   names(lens) <- nms
   return(lens)
+}
+
+
+# internal alternative for wc -l for windows
+wc.windows <- function(fn) {
+  dat.file <- file(fn)
+  open(con=dat.file,open="r")
+  eof <- FALSE; cc <- 0
+  while(!eof) {
+    eof <- length(readLines(dat.file,n=1))==0
+    cc <- cc + 1
+  }
+  close(con=dat.file)
+  return(cc-1)
 }
 
 
