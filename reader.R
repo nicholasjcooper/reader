@@ -456,6 +456,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
     if(hope10<3) { lown <- hope10 } else { lown <- 3 }
     if(hope10<2) { h2 <- lown <- 1 } else { h2 <- 2 }
     mini.parse <- strsplit(first.10,def)
+    if(length(mini.parse)==0) { return(character(0)) }  # empty file
     splitto <- sapply(mini.parse,length)
     if(all(splitto[lown:hope10]==splitto[h2]) & (splitto[1]==(splitto[h2]-1))) {
       # was first row 1 delimiter shorter than all other rows? (i.e, header row)
@@ -510,7 +511,10 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
             #print(mini.parse); print(char.cnts); print(Zs)
             critZ <- abs(qnorm((h.test.p*(min(round(sqrt(length(Zs))),9)))/2))
             #cat("Zs mean",mean(Zs,na.rm=TRUE),"critZ",critZ,"\n")
-            if(mean(Zs,na.rm=TRUE)<critZ) { hdr <- FALSE } else { hdr <- TRUE }
+            mZ <- mean(Zs,na.rm=TRUE)
+            if(length(mZ)>0) {
+             if(mZ<critZ) { hdr <- FALSE } else { hdr <- TRUE }
+            } else { hdr <- TRUE }
             if(!is.na(header)) { if(is.logical(header)) { hdr <- header }}
             if(nchar(def)>1) {
               #read table only supports 1 byte delimiters (not regular expressions) 
