@@ -507,11 +507,12 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
           }
           z.test <- function(X) { (X[1] - mean(X[-1],na.rm=TRUE))/max(1,sd(X[-1],na.rm=TRUE)) }
           Zs <- abs(apply(as.df(char.cnts),1,z.test))
-          if(length(Zs)>0) {
+          if(length(Zs)>0 & hope10>2) {
             #print(mini.parse); print(char.cnts); print(Zs)
             critZ <- abs(qnorm((h.test.p*(min(round(sqrt(length(Zs))),9)))/2))
             #cat("Zs mean",mean(Zs,na.rm=TRUE),"critZ",critZ,"\n")
             mZ <- mean(Zs,na.rm=TRUE)
+           # prv(mZ,critZ,Zs,z.test,splitto,h.test.p,char.cnts,hope10)
             if(length(mZ)>0) {
              if(mZ<critZ) { hdr <- FALSE } else { hdr <- TRUE }
             } else { hdr <- TRUE }
@@ -548,7 +549,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
               file.out <- shift.rownames(file.out,override,warn=!quiet)
             }
           } else {
-            warning("error of unknown cause in reader function, using readLines")
+            warning("file too small to determine structure, or other error in reader function, reverting to readLines")
             file.out <- readLines(full.path)
           }
         } else {
