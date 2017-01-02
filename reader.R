@@ -1,11 +1,13 @@
 ###NAMESPACE ADDITIONS###
 # Depends: R (>= 2.10), utils, NCmisc
-# Imports: grDevices, graphics, stats
+# Imports: grDevices, graphics, stats, methods
 # Suggests:
 # importFrom(stats, rnorm)
 # importFrom(graphics, hist, plot)
 # importFrom(grDevices, colors) 
 # import(utils, NCmisc)
+# importFrom(methods, is)
+# importFrom(stats, qnorm, sd)
 ###END NAMESPACE###
 
 #' Find which column in a dataframe contains a specified set of values.
