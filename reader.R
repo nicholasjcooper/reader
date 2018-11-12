@@ -28,7 +28,7 @@
 #'  that maps the frame rows onto ids; 'results': the (sub)set of ids
 #'  found in frame. NAs given for ids not found
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @examples
 #' new.frame <- data.frame(day=c("M","T","W"),time=c(9,12,3),staff=c("Mary","Jane","John"))
 #' staff.ids <- c("Mark","Jane","John","Andrew","Sally","Mary")
@@ -100,7 +100,7 @@ find.id.col <- function(frame,ids,ret=c("col","maxpc","index","result"))
 #'  matrix of a very large big.matrix object.
 #' @return returns a data.frame regardless of the original object type
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{force.vec}}
 #' @examples
 #' # create a matrix, binary file, text file, big.matrix.descriptor
@@ -223,7 +223,7 @@ vec.extract.mat <- function(X,most.unique=TRUE,max.col=100) {
 #' @param warn whether to display a warning if unknown.data is a matrix
 #' @return returns a vector regardless of the original object type
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{force.frame}}
 #' @examples
 #' # create a matrix, binary file, and simple vector
@@ -294,7 +294,7 @@ force.vec <- function(unknown.data,most.unique=TRUE,dir=NULL, warn=FALSE)
 #' @param ignore.case whether to ignore the upper/lower case of the column names
 #' @return returns the original dataframe with the target column renamed
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @examples
 #' df <- data.frame(Sex=c("M","F","F"),time=c(9,12,3),ID=c("ID3121","ID3122","ID2124"))
 #' # standard example
@@ -361,7 +361,7 @@ column.salvage <- function(frame,desired,testfor, ignore.case=TRUE)
 #' @return returns the most appropriate object depending on the file type,
 #'  which is usually a data.frame except for binary files
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @examples
 #' orig.dir <- getwd(); setwd(tempdir()); # move to temporary dir
 #' # create some datasets
@@ -594,7 +594,7 @@ reader <- function(fn,dir="",want.type=NULL,def="\t",force.read=TRUE,header=NA,h
 #' @param print.all setting to T, simply prints the list of supported ext
 #' @return returns the 4 way classification for each file/extension
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{get.delim}}
 #' @examples
 #' classify.ext(c("test.txt","*.csv","tot","other","rda","test.RDatA"))
@@ -633,7 +633,7 @@ classify.ext <- function(ext=NULL,more.txt=NULL,more.bin=NULL,more.csv=NULL,prin
 #' @param warn whether to display warnings if assumptions aren't met
 #' @return returns vectors of strings of char, lengths X
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{reader}}
 #' @examples
 #' df1 <- data.frame(ID=paste("ID",101:110,sep=""),
@@ -758,7 +758,7 @@ assess.dat.type <- function(dat)
 #' @param fn filename(s) (with full path is ok too)
 #' @return returns the (usually) 3 character file extension of a filename
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{rmv.ext}}
 #' @examples
 #' get.ext("/documents/nick/mydoc.xlsx")
@@ -788,7 +788,7 @@ get.ext <- function(fn) {
 #' @param print.known return the list of 'known' file extensions
 #' @return returns the file name/path without the file extension
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{get.ext}}
 #' @examples
 #' rmv.ext(print.known=TRUE)
@@ -804,7 +804,7 @@ rmv.ext <- function(fn=NULL,only.known=TRUE,more.known=NULL,print.known=FALSE) {
   known.ext <- c("TXT","RDATA","TAB","DAT","CSV","VCF","GCM","BIM","MAP","FAM",
                  "PFB","SH","R","CPP","H","DOC","DOCX","XLS","XLSX","PDF","JPG",
                  "BMP","PNG","TAR","GZ","CNV","PL","PY","ZIP","ORG","RDA","DSC","BCK",
-                 "ABW","HTM","HTML",toupper(more.known))
+                 "ABW","HTM","HTML","JSON","TSV","BAM","ODT","ODS","RDA","JS","JAVA","CLASS",toupper(more.known))
   if(is.null(fn)) { 
     if(print.known) {
       return(known.ext)
@@ -877,7 +877,7 @@ as.df <- function(...) {
 #' @param must.exist the specified file must already exist, else error
 #' @return returns vector of file names with the full paths
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @examples
 #' mydir <- "/Documents"
 #' cat.path(mydir,"temp.doc")
@@ -944,7 +944,7 @@ dir.force.slash <- function(dir) {
 #'  list.out=TRUE, then returns a list with names corresponding to 'coms' and values equivalent to 'value' column of 
 #'  the data.frame that would be returned if list.out=FALSE
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @examples
 #' parse.args(c("M=1","NAME=John","X=10.5"),coms=c("M","X","NAME"))
 #' parse.args(c("N=1")) # invalid command entered, ignored with warning
@@ -1013,7 +1013,7 @@ parse.args <- function(arg.list=NULL,coms=c("X"),def=0, list.out=F, verbose=TRUE
 #' @param all.in.dir select whether to extract length for all files in dir
 #' @return returns length of file (or all files)
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{file.ncol}}
 #' @examples
 #' orig.dir <- getwd(); setwd(tempdir()); # move to temporary dir
@@ -1076,7 +1076,7 @@ wc.windows <- function(fn) {
 #' @param excl.rn exclude rownames from column count (essentially subtract 1)
 #' @return returns number of columns in file(s). If no delimiter, then =1
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{file.nrow}}
 #' @examples
 #' orig.dir <- getwd(); setwd(tempdir()); # move to temporary dir
@@ -1143,7 +1143,7 @@ file.ncol <- function(fn,reader=FALSE,del=NULL,comment="#",skip=0,force=FALSE,ex
 #'  result,will be truncated - although in this case, the last 
 #'  line will always be read.
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @examples
 #' orig.dir <- getwd(); setwd(tempdir()); # move to temporary dir
 #' dat <- matrix(sample(100),nrow=10)
@@ -1191,7 +1191,7 @@ n.readLines <- function(fn,n,comment="#",skip=0,header=TRUE)
 #'  at >large.
 #' @return returns character of the most likely delimiter
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{reader}}
 #' @examples
 #' orig.dir <- getwd(); setwd(tempdir()); # move to temporary dir
@@ -1270,7 +1270,7 @@ get.delim <- function(fn,n=10,comment="#",skip=0,
 #' @return if the file is found, returns the full path of the file,
 #'  else returns an empty string ""
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{is.file}}
 #' @examples
 #' orig.dir <- getwd(); setwd(tempdir()); # move to temporary dir
@@ -1317,7 +1317,7 @@ find.file <- function(fn,dir="",dirs=NULL) {
 #' @return logical vector of whether each file was found,  or  if
 #'  combine is true, then a single value whether ALL valid or not.
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk}
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk}
 #' @seealso \code{\link{find.file}}
 #' @examples
 #' orig.dir <- getwd(); setwd(tempdir()); # move to temporary dir
@@ -1406,7 +1406,7 @@ add.dir.if.not <- function(locs,dir="",dirs="",blank.if.not=TRUE,warn=FALSE) {
 #' @param dat data.frame or matrix
 #' @return returns dat with space padding as character
 #' @export 
-#' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk} #' @author Nicholas Cooper \email{nick.cooper@@cimr.cam.ac.uk} 
+#' @author Nicholas Cooper \email{njcooper@@gmx.co.uk} #' @author Nicholas Cooper \email{njcooper@@gmx.co.uk} 
 #' @examples
 #' orig.dir <- getwd(); setwd(tempdir()); # move to temporary dir
 #' df <- data.frame(ID=paste("ID",99:108,sep=""),
